@@ -15,8 +15,12 @@ class MessagesRepository():
         add_data_stmt = insert(self.model).values(**data.model_dump()).returning(self.model)
         await self.session.execute(add_data_stmt)
 
-    async def get_all(self) -> list[Message]:
-        query = select(self.model)
+    async def get_ten(self) -> list[Message]:
+        query = (
+            select(self.model)
+            .order_by(self.model.created_at.desc())
+            .limit(10)
+        )
         result = await self.session.execute(query)
         models = [
             self.schema.model_validate(one, from_attributes=True) for one in result.scalars().all()

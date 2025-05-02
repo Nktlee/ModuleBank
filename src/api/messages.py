@@ -26,6 +26,4 @@ async def add_message(data: MessageRequestAdd):
         await MessagesRepository(session).add(data=_data)
         await session.commit()
 
-        return await MessagesRepository(session).get_all()
-
-# доделать клиент и непраавильно считается количество сообщений
+        return await MessagesRepository(session).get_ten()
