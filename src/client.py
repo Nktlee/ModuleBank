@@ -4,10 +4,22 @@ import asyncio
 import aiohttp
 from aiohttp.client_exceptions import ClientConnectorError
 
-USERS = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Heidi", "Ivan", "Judy"]
+USERS = [
+    "Alice",
+    "Bob",
+    "Charlie",
+    "David",
+    "Eve",
+    "Frank",
+    "Grace",
+    "Heidi",
+    "Ivan",
+    "Judy",
+]
 SERVER_URL = "http://localhost:8000/messages"
 REQUEST_COUNT_PER_COROUTINE = 100
 NUM_COROUTINES = 50
+
 
 async def make_request(session, server_url):
     sender = random.choice(USERS)
@@ -21,6 +33,7 @@ async def make_request(session, server_url):
     except ClientConnectorError:
         return False, None
 
+
 async def worker_task(worker_id, session):
     requests_made = 0
     total_latency = 0
@@ -32,6 +45,7 @@ async def worker_task(worker_id, session):
         requests_made += 1
     return total_latency / REQUEST_COUNT_PER_COROUTINE
 
+
 async def main():
     tasks = []
     start_time = time.time()
@@ -40,14 +54,15 @@ async def main():
             task = asyncio.create_task(worker_task(i, session))
             tasks.append(task)
         results = await asyncio.gather(*tasks)
-    avg_latencies = sum(results)/len(results)
+    avg_latencies = sum(results) / len(results)
     elapsed_time = time.time() - start_time
     throughput = NUM_COROUTINES * REQUEST_COUNT_PER_COROUTINE / elapsed_time
 
-    print(f'Total Requests: {NUM_COROUTINES*REQUEST_COUNT_PER_COROUTINE}')
-    print(f'Elapsed Time: {elapsed_time:.2f}s')
-    print(f'Average Latency per Request: {avg_latencies:.4f}s')
-    print(f'Throughput: {throughput:.2f} req/sec')
+    print(f"Total Requests: {NUM_COROUTINES * REQUEST_COUNT_PER_COROUTINE}")
+    print(f"Elapsed Time: {elapsed_time:.2f}s")
+    print(f"Average Latency per Request: {avg_latencies:.4f}s")
+    print(f"Throughput: {throughput:.2f} req/sec")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
