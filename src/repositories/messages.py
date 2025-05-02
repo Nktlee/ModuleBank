@@ -4,7 +4,7 @@ from src.models.messages import MessagesOrm
 from src.schemas.messages import Message, MessageAdd
 
 
-class MessagesRepository():
+class MessagesRepository:
     model = MessagesOrm
     schema = Message
 
@@ -12,22 +12,21 @@ class MessagesRepository():
         self.session = session
 
     async def add(self, data: MessageAdd) -> Message:
-        add_data_stmt = insert(self.model).values(**data.model_dump()).returning(self.model)
+        add_data_stmt = (
+            insert(self.model).values(**data.model_dump()).returning(self.model)
+        )
         await self.session.execute(add_data_stmt)
 
     async def get_ten(self) -> list[Message]:
-        query = (
-            select(self.model)
-            .order_by(self.model.created_at.desc())
-            .limit(10)
-        )
+        query = select(self.model).order_by(self.model.created_at.desc()).limit(10)
         result = await self.session.execute(query)
         models = [
-            self.schema.model_validate(one, from_attributes=True) for one in result.scalars().all()
+            self.schema.model_validate(one, from_attributes=True)
+            for one in result.scalars().all()
         ]
 
         return models
-    
+
     async def get_one_or_none(self, sender_name: str):
         query = (
             select(MessagesOrm)
