@@ -16,7 +16,7 @@ USERS = [
     "Ivan",
     "Judy",
 ]
-SERVER_URL = "http://localhost:8000/messages"
+SERVER_URL = "http://localhost:8001/messages"
 REQUEST_COUNT_PER_COROUTINE = 100
 NUM_COROUTINES = 50
 
