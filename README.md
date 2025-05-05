@@ -16,7 +16,7 @@
 
    Склонируй репозиторий проекта:
 
-   git clone https://github.com/your-repo/DummyMessenger.git
+   git clone git@github.com:Nktlee/ModuleBank.git
 
    Запусти приложение с помощью Docker Compose (если у тебя есть Docker):
 
